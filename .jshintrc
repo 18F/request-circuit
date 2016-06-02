@@ -60,5 +60,8 @@
    */
 
   // Suppress warnings about == null comparisons.
-  "eqnull": true
+  "eqnull": true,
+
+  // Add mocha global functions
+  "mocha": true
 }

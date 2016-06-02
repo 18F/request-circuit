@@ -1,13 +1,8 @@
 'use strict';
 
-require('../resources/env-setup.js');
-
 const assert              = require('assert');
 const http                = require('http');
-const sinon               = require('sinon');
 const request             = require('request');
-const dbHelper            = require('../resources/db-helper');
-const circuitBreaker      = require('../../app/models/persistence/sequelize/circuit-breaker-2');
 
 const PromiseBreaker      = require('../../app/models/promise-breaker');
 

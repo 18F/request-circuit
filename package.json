@@ -1,0 +1,26 @@
+{
+  "name": "request-circuit",
+  "version": "0.9.0",
+  "description": "This wraps requests in a circuit breaker pattern to isolate applications from faulty collaborators",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --recursive --slow 250"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/18f/request-circuit.git"
+  },
+  "keywords": [
+    "circuit",
+    "breaker",
+    "pattern",
+    "site-reliabliity",
+    "SOA"
+  ],
+  "author": "Scott O'Neal, Kane Baccigalupi",
+  "license": "CC0-1.0",
+  "bugs": {
+    "url": "https://github.com/18f/request-circuit/issues"
+  },
+  "homepage": "https://github.com/18f/request-circuit#readme"
+}

@@ -21,7 +21,7 @@ describe('memory-store', () => {
     });
 
     it('should have a set() method', () => {
-      expect(testStore.get).to.be.a('function');
+      expect(testStore.set).to.be.a('function');
     });
 
     it('should have a destroy() method', () => {

@@ -6,7 +6,7 @@ const http     = require('http');
 const expect   = require('chai').expect;
 const _        = require('lodash');
 
-const PromiseBreaker  = require('../lib/promise-breaker');
+const PromiseBreaker  = require('..');
 
 describe('PromiseBreaker', function() {
   let breaker, attributes;

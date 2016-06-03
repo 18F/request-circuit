@@ -1,8 +1,9 @@
 'use strict';
+/* jshint expr: true */
 /* jshint -W003 */
 
-const assert   = require('assert');
 const http     = require('http');
+const expect   = require('chai').expect;
 const _        = require('lodash');
 
 const PromiseBreaker  = require('../lib/promise-breaker');
@@ -46,8 +47,8 @@ describe('PromiseBreaker', function() {
       tripper = new PromiseBreaker.TimeTripper(attributes, timeout / 2);
       tripper.on('timeout', assertError);
       function assertError(response) {
-        assert.equal(response.statusCode, 500);
-        assert.equal(response.body, 'Request timed out');
+        expect(response.statusCode).to.equal(500);
+        expect(response.body).to.equal('Request timed out');
         done();
       }
       tripper.run();
@@ -60,8 +61,8 @@ describe('PromiseBreaker', function() {
       tripper.run();
 
       function assertBody(response) {
-        assert.equal(response.statusCode, 200);
-        assert.equal(response.body, 'Oh yeah! it worked');
+        expect(response.statusCode).to.equal(200);
+        expect(response.body).to.equal('Oh yeah! it worked');
         done();
       }
     });
@@ -74,7 +75,7 @@ describe('PromiseBreaker', function() {
       tripper.run();
 
       function assertBody(response) {
-        assert.equal(response.statusCode, 400);
+        expect(response.statusCode).to.equal(400);
         done();
       }
     });
@@ -90,8 +91,8 @@ describe('PromiseBreaker', function() {
       breaker
         .run(attributes)
         .then((response) => {
-          assert.equal(response.statusCode, 200);
-          assert.equal(response.body, 'Oh yeah! it worked');
+          expect(response.statusCode).to.equal(200);
+          expect(response.body).to.equal('Oh yeah! it worked');
           done();
         })
         .catch(done);
@@ -104,7 +105,7 @@ describe('PromiseBreaker', function() {
       breaker
         .run(attributes)
         .catch(function(err) {
-          assert.equal(err.message, '403: It all went wrong');
+          expect(err.message).to.equal('403: It all went wrong');
           done();
         });
     });
@@ -116,7 +117,7 @@ describe('PromiseBreaker', function() {
       breaker
         .run(attributes)
         .catch(function(err) {
-          assert.equal(err.message, 'Request timed out');
+          expect(err.message).to.equal('Request timed out');
           done();
         });
     });
@@ -133,11 +134,11 @@ describe('PromiseBreaker', function() {
         breaker.store
           .get(breaker.name)
           .then(function(record) {
-            assert.equal(record.consec_faults, 1);
-            assert.equal(record.fault_ct, 1);
-            assert(record.fault_ts);
-            assert(!record.tripped);
-            assert(!record.trip_ts);
+            expect(record.consec_faults).to.equal(1);
+            expect(record.fault_ct).to.equal(1);
+            expect(record.fault_ts).to.be.above(0);
+            expect(record.tripped).to.not.be.true;
+            expect(record.trip_ts).to.equal(0);
             done();
           });
       }
@@ -161,14 +162,14 @@ describe('PromiseBreaker', function() {
         .run(attributes)
         .catch(assertBreakerTripped);
 
-      function assertBreakerTripped(response) {
+      function assertBreakerTripped() {
         breaker.store
           .get(breaker.name)
           .then(function(record) {
-            assert.equal(record.fault_ct, 2);
-            assert.equal(record.consec_faults, 2);
-            assert(record.tripped);
-            assert(record.trip_ts);
+            expect(record.fault_ct).to.equal(2);
+            expect(record.consec_faults).to.equal(2);
+            expect(record.tripped).to.be.true;
+            expect(record.trip_ts).to.be.above(0);
             done();
           });
       }
@@ -200,9 +201,9 @@ describe('PromiseBreaker', function() {
         breaker.store
           .get(breaker.name)
           .then(function(record) {
-            assert.equal(record.fault_ct, breaker.config.windowFaults);
-            assert(record.tripped);
-            assert(record.trip_ts);
+            expect(record.fault_ct).to.equal(breaker.config.windowFaults);
+            expect(record.tripped).to.be.true;
+            expect(record.trip_ts).to.be.above(0);
             done();
           });
       }
@@ -226,7 +227,7 @@ describe('PromiseBreaker', function() {
         .catch(assertFailFast);
 
       function assertFailFast(err) {
-        assert(err.message, 'Circuit: geo is tripped');
+        expect(err.message).to.equal('Circuit: geo is tripped');
         done();
       }
     });
@@ -252,9 +253,9 @@ describe('PromiseBreaker', function() {
           breaker.store
             .get(breaker.name)
             .then((record) => {
-              assert.equal(record.fault_ct, 0);
-              assert.equal(record.consec_faults, 0);
-              assert.equal(record.tripped, false);
+              expect(record.fault_ct).to.equal(0);
+              expect(record.consec_faults).to.equal(0);
+              expect(record.tripped).to.be.false;
               done();
             });
         })
@@ -265,8 +266,8 @@ describe('PromiseBreaker', function() {
       breaker
         .run(attributes)
         .then((response) => {
-          assert.equal(response.statusCode, 200);
-          assert.equal(response.body, 'Oh yeah! it worked');
+          expect(response.statusCode).to.equal(200);
+          expect(response.body).to.equal('Oh yeah! it worked');
           done();
         })
         .catch(done);

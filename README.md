@@ -25,9 +25,18 @@ Out of the box, `request-breaker` uses an in-memory storage mechanism for keepin
 
 **Example**
 ```js
-const new CircuitBreaker({
+const weatherBreaker = new CircuitBreaker('weather', {
   store: new CustomStore()
 });
+```
+
+There are instances where you might want to share a store interface across breakers:
+
+```js
+const dbStore = new DatabaseStore();
+
+const weatherBreaker   = new CircuitBreaker('weather', { store: dbStore });
+const recaptchaBreaker = new CircuitBreaker('recaptcha', { store: dbStore });
 ```
 
 Your interface needs implement the following methods and must return a bluebird promise:
